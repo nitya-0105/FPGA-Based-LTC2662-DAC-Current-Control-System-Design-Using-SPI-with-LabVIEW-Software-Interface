@@ -180,9 +180,127 @@ SPI Mode 0 is defined as:
 
 ## 📊 Results & Analysis
 
-- SPI communication successfully established  
-- Output current closely matches theoretical values  
-- MUX and direct measurement agree in most cases  
+---
+
+## 🚀 Advanced Implementations
+
+### 🔁 1. MISO Readback Implementation
+
+To enhance system reliability, **MISO (SDO) readback functionality** was implemented using the LTC2662 serial output pin.
+
+- The DAC outputs previously transmitted data after **32 clock cycles delay**
+- This enables **echo readback verification** of SPI communication
+- Also allows monitoring of **Fault Register (FR bits)**
+
+#### 🔍 Features:
+- Verification of transmitted SPI packets  
+- Detection of fault conditions:
+  - Open circuit  
+  - Overtemperature  
+  - Power limit  
+- Debugging support using oscilloscope  
+
+<p align="center">
+  <a href="SPI%20communication.png">
+    <img src="SPI%20communication.png" width="600">
+  </a><br>
+  <em>SPI Communication with MISO Readback Verification</em>
+</p>
+
+---
+
+### 🖥️ 2. GUI-Based DAC Control (LabVIEW + DAQ)
+
+A **Graphical User Interface (GUI)** was developed using **LabVIEW** to control the DAC outputs in real-time.
+
+#### ⚙️ System Integration:
+- FPGA communicates DAC via SPI  
+- **DAQ (Data Acquisition Device)** used as interface  
+- LabVIEW GUI sends control signals via DAQ  
+
+#### 🎯 Capabilities:
+- Real-time current control  
+- Dynamic parameter adjustment  
+- Visual monitoring of DAC behavior  
+
+#### 🧠 Working:
+1. User inputs value on GUI  
+2. DAQ transmits control signal  
+3. FPGA processes and sends SPI command  
+4. DAC updates output current  
+
+<p align="center">
+  <a href="Labview%20Monitor.png">
+    <img src="Labview%20Monitor.png" width="600">
+  </a><br>
+  <em>LabVIEW GUI for Real-Time DAC Control</em>
+</p>
+
+---
+
+### 📡 3. Multi-Channel Control
+
+The LTC2662 supports **5 independent DAC channels**, and the system was extended to support:
+
+- Simultaneous channel updates  
+- Independent current control per channel  
+- Efficient SPI command sequencing  
+
+This allows:
+- Parallel current output generation  
+- Scalable system design  
+
+---
+
+### 📏 4. Calibration using MUX Monitoring
+
+To improve accuracy, **calibration was performed using the internal MUX** of LTC2662.
+
+#### 📐 Principle:
+
+#### ⚙️ Process:
+1. Select channel via MUX command  
+2. Measure VMUX voltage  
+3. Compare with theoretical value  
+4. Apply correction factor  
+
+#### 📊 Outcome:
+- Improved accuracy  
+- Reduced error due to:
+  - Offset  
+  - Gain variation  
+  - Load effects  
+
+<p align="center">
+  <a href="Debug%20data.png">
+    <img src="Debug%20data.png" width="600">
+  </a><br>
+  <em>Calibration and Debug Data using MUX Monitoring</em>
+</p>
+
+---
+
+### 🧪 5. System-Level Integration
+
+The complete system integrates:
+
+- FPGA (SPI Master Controller)  
+- LTC2662 DAC Board  
+- DAQ Interface  
+- LabVIEW GUI  
+
+This creates a **closed-loop controllable analog system**, suitable for:
+
+- Industrial control applications  
+- Precision current driving  
+- Embedded system prototyping  
+
+<p align="center">
+  <a href="[![50mA](50mA.png)](50mA.png)">
+    <img src="[![50mA](50mA.png)](50mA.png)" width="600">
+  </a><br>
+  <em>Complete Experimental Setup</em>
+</p>
 
 ---
 
