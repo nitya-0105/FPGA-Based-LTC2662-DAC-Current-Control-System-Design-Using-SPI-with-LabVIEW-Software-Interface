@@ -1,16 +1,16 @@
 # FPGA-Based-LTC2662-DAC-Current-Control-System-Design-Using-SPI-with-LabVIEW-Software-Interface
-# 🚀 LTC2662 DAC Control using SPI (FPGA / Verilog)
+#  LTC2662 DAC Control using SPI (FPGA / Verilog)
 
 ---
 
-## 📖 Project Overview
+##  Project Overview
 This project focuses on the **design and implementation of an SPI-based control system for the LTC2662**, a high-current, multi-channel DAC. The system is implemented using **Verilog on FPGA**, enabling precise control of analog current outputs through digital commands.
 
 The project not only covers **digital design (SPI, FSM, timing)** but also dives deep into **analog behavior, hardware validation, and real-world challenges** such as power limitations, noise, and measurement inaccuracies.
 
 ---
 
-## 🎯 Objectives
+##  Objectives
 
 The main objectives of this project are:
 
@@ -30,11 +30,11 @@ The main objectives of this project are:
 
 ---
 
-## 🧠 LTC2662 DAC – Detailed Introduction
+##  LTC2662 DAC – Detailed Introduction
 
 The **LTC2662** is a **5-channel current source DAC** designed for high precision and high current applications.
 
-### 🔑 Key Features
+###  Key Features
 - 5 independent current output channels  
 - Programmable current range:
   - 3.125 mA → 300 mA  
@@ -48,7 +48,7 @@ The **LTC2662** is a **5-channel current source DAC** designed for high precisio
 [![LTC2662 DAC Board](LTC2662%20DAC%20board.png)](LTC2662%20DAC%20board.png)
 ---
 
-### ⚙️ Working Principle
+###  Working Principle
 - IOUT ∝ (VREF / RFSADJ)
   
 - **VREF** → Internal or external reference  
@@ -61,7 +61,7 @@ Each channel has:
 
 ---
 
-### 🧩 Internal Architecture (Concept)
+###  Internal Architecture (Concept)
 
 - SPI Shift Register  
 - Command Decoder  
@@ -72,9 +72,9 @@ Each channel has:
 
 ---
 
-## 🔌 Hardware Description
+##  Hardware Description
 
-### 🟦 1. LTC2662 Evaluation Board
+###  1. LTC2662 Evaluation Board
 - Model: **DC2692A-A**
 - Provides:
   - DAC chip
@@ -90,7 +90,7 @@ Each channel has:
 [![Device Setup](Device%20Setup.JPG)](Device%20Setup.JPG)
 ---
 
-### 🟩 2. FPGA (SPI Master)
+###  2. FPGA (SPI Master)
 - Implements SPI protocol using Verilog  
 - Generates:
   - SCLK  
@@ -99,34 +99,34 @@ Each channel has:
   - LDAC  
   - CLR  
 
-#### 📷 FPGA Setup:
+####  FPGA Setup:
 [![Basys3 Board](Basys3%20Board.png)](Basys3%20Board.png)
 ---
 
-### 🟨 3. Measurement Instruments
+###  3. Measurement Instruments
 
-#### 🔹 MSO (Mixed Signal Oscilloscope)
+####  MSO (Mixed Signal Oscilloscope)
 - Used to verify:
   - SPI timing  
   - Clock frequency  
   - Data transfer  
 
-#### 🔹 Multimeter
+####  Multimeter
 - Used for accurate current/voltage measurement  
 
 ####  SPI Waveform:
 [![SPI Communication](SPI%20communication.png)](SPI%20communication.png)
 ---
 
-## 🔄 SPI Protocol – Detailed Explanation
+##  SPI Protocol – Detailed Explanation
 
-### 🧭 SPI Mode 0 (Used in this Project)
+###  SPI Mode 0 (Used in this Project)
 
 SPI Mode 0 is defined as:
 - **CPOL = 0 → Clock idle LOW**
 - **CPHA = 0 → Data sampled on rising edge**
 
-### 📌 Behavior:
+###  Behavior:
 - Data is **valid before rising edge**
 - Data changes on **falling edge**
   ### SPI MODE 0 WAVEFROM
@@ -150,9 +150,9 @@ SPI Mode 0 is defined as:
 
 ---
 
-## ⚙️ Verilog Implementation
+##  Verilog Implementation
 
-### 🔧 Features
+###  Features
 - FSM-based SPI controller  
 - Clock divider (10 MHz SPI clock)  
 - Controlled timing (setup/hold compliance)  
@@ -160,11 +160,11 @@ SPI Mode 0 is defined as:
 
 ---
 
-### 🔄 FSM Flow
+###  FSM Flow
 - IDLE → LOAD → CS_SETUP → TRANSFER → CS_HOLD → UPDATE → DONE
 ---
 
-## 🧪 Experimental Setup
+##  Experimental Setup
 
 ### Method 1: Direct Measurement
 - Multimeter connected to output pin  
@@ -178,13 +178,13 @@ SPI Mode 0 is defined as:
 [![Experimental Setup](Experimental%20Setup.JPG)](Experimental%20Setup.JPG)
 ---
 
-## 📊 Results & Analysis
+##  Results & Analysis
 
 ---
 
-## 🚀 Advanced Implementations
+##  Advanced Implementations
 
-### 🔁 1. MISO Readback Implementation
+###  1. MISO Readback Implementation
 
 To enhance system reliability, **MISO (SDO) readback functionality** was implemented using the LTC2662 serial output pin.
 
@@ -192,7 +192,7 @@ To enhance system reliability, **MISO (SDO) readback functionality** was impleme
 - This enables **echo readback verification** of SPI communication
 - Also allows monitoring of **Fault Register (FR bits)**
 
-#### 🔍 Features:
+####  Features:
 - Verification of transmitted SPI packets  
 - Detection of fault conditions:
   - Open circuit  
@@ -209,21 +209,21 @@ To enhance system reliability, **MISO (SDO) readback functionality** was impleme
 
 ---
 
-### 🖥️ 2. GUI-Based DAC Control (LabVIEW + DAQ)
+###  2. GUI-Based DAC Control (LabVIEW + DAQ)
 
 A **Graphical User Interface (GUI)** was developed using **LabVIEW** to control the DAC outputs in real-time.
 
-#### ⚙️ System Integration:
+####  System Integration:
 - FPGA communicates DAC via SPI  
 - **DAQ (Data Acquisition Device)** used as interface  
 - LabVIEW GUI sends control signals via DAQ  
 
-#### 🎯 Capabilities:
+####  Capabilities:
 - Real-time current control  
 - Dynamic parameter adjustment  
 - Visual monitoring of DAC behavior  
 
-#### 🧠 Working:
+####  Working:
 1. User inputs value on GUI  
 2. DAQ transmits control signal  
 3. FPGA processes and sends SPI command  
@@ -238,7 +238,7 @@ A **Graphical User Interface (GUI)** was developed using **LabVIEW** to control 
 
 ---
 
-### 📡 3. Multi-Channel Control
+###  3. Multi-Channel Control
 
 The LTC2662 supports **5 independent DAC channels**, and the system was extended to support:
 
@@ -259,11 +259,11 @@ This allows:
 
 ---
 
-### 📏 4. Calibration using MUX Monitoring
+###  4. Calibration using MUX Monitoring
 
 To improve accuracy, **calibration was performed using the internal MUX** of LTC2662.
 
-#### 📊 Monitoring Results
+####  Monitoring Results
 
 <p align="center">
   <a href="200mA%20FULL%20SCALE.png">
@@ -287,15 +287,15 @@ This improves:
 
 ---
 
-#### 📐 Principle:
+####  Principle:
 
-#### ⚙️ Process:
+####  Process:
 1. Select channel via MUX command  
 2. Measure VMUX voltage  
 3. Compare with theoretical value  
 4. Apply correction factor  
 
-#### 📊 Outcome:
+####  Outcome:
 - Improved accuracy  
 - Reduced error due to:
   - Offset  
@@ -311,7 +311,7 @@ This improves:
 
 ---
 
-### 🧪 5. System-Level Integration
+###  5. System-Level Integration
 
 The complete system integrates:
 
@@ -335,9 +335,9 @@ This creates a **closed-loop controllable analog system**, suitable for:
 
 ---
 
-## ⚠️ Challenges Encountered
+##  Challenges Encountered
 
-### 🔴 1. MUX Monitoring Issue
+###  1. MUX Monitoring Issue
 - Accurate for normal loads  
 - Inaccurate for very low resistance (e.g., 0.068Ω)  
 
@@ -346,7 +346,7 @@ This creates a **closed-loop controllable analog system**, suitable for:
 
 ---
 
-### 🔴 2. FSADJ Resistor Effect
+###  2. FSADJ Resistor Effect
 - Determines full-scale current  
 - Internal: ~20kΩ  
 - External resistor changes output range  
@@ -356,7 +356,7 @@ This creates a **closed-loop controllable analog system**, suitable for:
 
 ---
 
-### 🔴 3. Power Limiting Issue
+###  3. Power Limiting Issue
 Condition:
 
 Effect:
@@ -367,7 +367,7 @@ Effect:
 
 ---
 
-### 🔴 4. CLR Pin Behavior
+###  4. CLR Pin Behavior
 - Active LOW reset  
 - Clears all registers  
 
@@ -376,7 +376,7 @@ Effect:
 
 ---
 
-### 🔴 5. FAULT Pin
+###  5. FAULT Pin
 - Indicates:
   - Overtemperature  
   - Open circuit  
@@ -387,7 +387,7 @@ Effect:
 
 ---
 
-### 🔴 6. VCC and Supply Issues
+###  6. VCC and Supply Issues
 - VCC must be stable (2.85V – 5.5V)  
 - Improper supply causes:
   - Communication failure  
@@ -395,13 +395,13 @@ Effect:
 
 ---
 
-### 🔴 7. Noise & Wiring
+###  7. Noise & Wiring
 - Loose connections → unstable readings  
 - High current → heating effects  
 
 ---
 
-## 🧩 Complete Workflow
+##  Complete Workflow
 
 1. Initialize FPGA  
 2. Generate SPI clock  
@@ -415,7 +415,7 @@ Effect:
 
 ---
 
-## 📚 Key Learnings
+##  Key Learnings
 
 - Real-world SPI debugging  
 - DAC behavior under different loads  
@@ -426,7 +426,7 @@ Effect:
 
 ---
 
-## 🚀 Future Improvements
+##  Future Improvements
 
 - Implement **MISO readback**  
 - Multi-channel simultaneous control  
@@ -435,14 +435,14 @@ Effect:
 
 ---
 
-## 📎 References
+##  References
 - LTC2662 Datasheet (Analog Devices)  
 - SPI Verilog Implementation  
 - Hardware Experiment Observations  
 
 ---
 
-## 👤 Author
+##  Author
 **Nitya Maheshwari**  
 Electronics & Communication Engineering  
 
