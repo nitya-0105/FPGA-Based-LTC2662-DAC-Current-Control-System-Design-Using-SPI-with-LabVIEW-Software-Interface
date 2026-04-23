@@ -45,7 +45,7 @@ The **LTC2662** is a **5-channel current source DAC** designed for high precisio
   - Overtemperature
   - Open circuit
   - Power limit  
-
+[![LTC2662 DAC Board](LTC2662%20DAC%20board.png)](LTC2662%20DAC%20board.png)
 ---
 
 ### ⚙️ Working Principle
@@ -86,8 +86,8 @@ Each channel has:
 - VDD0–VDD4 = 15V  
 - VCC ≈ 5V (logic supply)
 
-#### 📷 DAC Board Setup:
-
+####  DAC Board Setup:
+[![Device Setup](Device%20Setup.JPG)](Device%20Setup.JPG)
 ---
 
 ### 🟩 2. FPGA (SPI Master)
@@ -100,7 +100,7 @@ Each channel has:
   - CLR  
 
 #### 📷 FPGA Setup:
-
+[![Basys3 Board](Basys3%20Board.png)](Basys3%20Board.png)
 ---
 
 ### 🟨 3. Measurement Instruments
@@ -114,8 +114,8 @@ Each channel has:
 #### 🔹 Multimeter
 - Used for accurate current/voltage measurement  
 
-#### 📷 SPI Waveform:
-
+####  SPI Waveform:
+[![SPI Communication](SPI%20communication.png)](SPI%20communication.png)
 ---
 
 ## 🔄 SPI Protocol – Detailed Explanation
@@ -129,6 +129,14 @@ SPI Mode 0 is defined as:
 ### 📌 Behavior:
 - Data is **valid before rising edge**
 - Data changes on **falling edge**
+  ### SPI MODE 0 WAVEFROM
+[![SPI Mode 0](SPI%20Waveform%20Mode%200.jpg)](SPI%20Waveform%20Mode%200.jpg)
+
+### MOSI DATA
+[![MOSI Data](MOSI%20-%20DATA.png)](MOSI%20-%20DATA.png)
+
+### CS WAVEFROM
+[![CS Signal](CS.png)](CS.png)
 
 ---
 
@@ -139,10 +147,6 @@ SPI Mode 0 is defined as:
 3. Sampled on rising edge of SCLK  
 4. After 24 bits → CS goes HIGH  
 5. Command executes  
-
----
-
-### 📦 Data Frame Format
 
 ---
 
@@ -158,12 +162,6 @@ SPI Mode 0 is defined as:
 
 ### 🔄 FSM Flow
 - IDLE → LOAD → CS_SETUP → TRANSFER → CS_HOLD → UPDATE → DONE
-  
----
-
-### 📂 Code Reference
-- `src/master_code.v`
-
 ---
 
 ## 🧪 Experimental Setup
@@ -175,7 +173,9 @@ SPI Mode 0 is defined as:
 - Internal MUX outputs voltage proportional to current  
 - IOUT = IFS × (VMUX / VREF)
 
+### Experimantal Setup 
 
+[![Experimental Setup](Experimental%20Setup.JPG)](Experimental%20Setup.JPG)
 ---
 
 ## 📊 Results & Analysis
