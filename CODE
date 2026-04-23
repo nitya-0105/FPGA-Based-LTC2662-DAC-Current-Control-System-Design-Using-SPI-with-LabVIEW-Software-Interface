@@ -1,0 +1,182 @@
+### MASTER DESIGN CODE
+`timescale 1ns / 1ps
+
+module ramp_output(
+    input clk,
+    input rst,
+    input start,
+    output reg led,
+    output sclk,
+    output reg cs,
+    output reg mosi,
+    output reg ldac,
+    output reg clr
+);
+
+
+parameter IDLE=0, LOAD=1, CS_SETUP=2, TRANSFER=3, CS_HOLD=4, UPDATE=5, LDAC_WAIT=6;
+
+
+wire sclk_wire;
+reg enable_sclk;
+
+reg sclk_d;
+reg [23:0] shift_reg;
+reg [4:0] bit_counter;
+reg packet_index;
+reg [2:0] state;
+reg [3:0] delay_cnt;
+
+
+clock_divider clk_div_inst (
+    .clk(clk),
+    .rst(rst),
+    .enable(enable_sclk),
+    .sclk(sclk_wire)
+);
+
+assign sclk = sclk_wire;
+
+
+always @(posedge clk) begin
+    sclk_d <= sclk_wire;
+end
+
+wire rising_edge  = (sclk_wire == 1 && sclk_d == 0);
+wire falling_edge = (sclk_wire == 0 && sclk_d == 1);
+
+
+wire [15:0] data_cnt;
+
+wire packet_done;
+assign packet_done = (state == CS_HOLD && delay_cnt == 2);
+
+ch_counter ch_cnt_inst (
+    .clk(clk),
+    .rst(rst),
+    .enable(packet_done),
+    .count(data_cnt)
+);
+
+
+function [23:0] span_packet;
+    input dummy;   
+    begin
+        span_packet = {4'b0110, 0100, 16'h0003};    //12.5
+    end
+endfunction
+
+function [23:0] data_packet;
+    input [15:0] val;
+    begin
+        data_packet = {4'b0011, 4'd0, val};
+    end
+endfunction
+
+
+always @(posedge clk or posedge rst) begin
+if(rst) begin
+    state<=IDLE;
+    cs<=1;
+    ldac<=0;
+    clr<=1;
+    packet_index<=0;
+    bit_counter<=0;
+    delay_cnt<=0;
+    enable_sclk<=0;
+end else begin
+
+case(state)
+
+
+IDLE: begin
+    cs<=1;
+    ldac<=0;
+    enable_sclk<=0;
+
+    if(start) begin
+        led<=1;
+        packet_index<=0;
+        state<=LOAD;
+    end
+end
+
+
+LOAD: begin
+    cs<=0;
+    bit_counter<=0;
+    delay_cnt<=0;
+
+    if(packet_index==0)
+        shift_reg <= span_packet(1'b0);   // ✅ FIX
+    else
+        shift_reg <= data_packet({12'd0, data_cnt});
+
+    state<=CS_SETUP;
+end
+
+
+CS_SETUP: begin
+    if(delay_cnt==1) begin
+        delay_cnt<=0;
+        enable_sclk<=1;
+        state<=TRANSFER;
+    end else
+        delay_cnt<=delay_cnt+1;
+end
+
+
+TRANSFER: begin
+
+    if(falling_edge) begin
+        mosi<=shift_reg[23];
+        shift_reg<={shift_reg[22:0],1'b0};
+    end
+
+    if(rising_edge) begin
+        if(bit_counter==23) begin
+            bit_counter<=0;
+            delay_cnt<=0;
+            enable_sclk<=0;
+            state<=CS_HOLD;
+        end else
+            bit_counter<=bit_counter+1;
+    end
+end
+
+
+CS_HOLD: begin
+    if(delay_cnt==2) begin
+        cs<=1;
+        delay_cnt<=0;
+
+        if(packet_index==0)
+            packet_index<=1;
+
+        state<=UPDATE;
+
+    end else
+        delay_cnt<=delay_cnt+1;
+end
+
+
+UPDATE: begin
+    ldac<=1;
+    delay_cnt<=0;
+    state<=LDAC_WAIT;
+end
+
+
+LDAC_WAIT: begin
+    if(delay_cnt==2) begin
+        ldac<=0;
+        state<=LOAD;
+    end else
+        delay_cnt<=delay_cnt+1;
+end
+
+endcase
+end
+end
+
+endmodule
