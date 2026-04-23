@@ -246,6 +246,13 @@ The LTC2662 supports **5 independent DAC channels**, and the system was extended
 - Independent current control per channel  
 - Efficient SPI command sequencing  
 
+<p align="center">
+  <a href="Device%20Setup.JPG">
+    <img src="Device%20Setup.JPG" width="600">
+  </a><br>
+  <em>Device Setup for Multi-Channel DAC Control</em>
+</p>
+
 This allows:
 - Parallel current output generation  
 - Scalable system design  
@@ -255,6 +262,30 @@ This allows:
 ### 📏 4. Calibration using MUX Monitoring
 
 To improve accuracy, **calibration was performed using the internal MUX** of LTC2662.
+
+#### 📊 Monitoring Results
+
+<p align="center">
+  <a href="200mA%20FULL%20SCALE.png">
+    <img src="200mA%20FULL%20SCALE.png" width="500">
+  </a>
+  <a href="Debug%20data.png">
+    <img src="Debug%20data.png" width="500">
+  </a><br>
+  <em>Full-Scale Output Verification and MUX-Based Calibration Data</em>
+</p>
+
+The MUX output voltage was used to:
+- Estimate actual output current  
+- Compare with theoretical values  
+- Apply calibration corrections  
+
+This improves:
+- Measurement accuracy  
+- System reliability  
+- Output consistency across channels  
+
+---
 
 #### 📐 Principle:
 
